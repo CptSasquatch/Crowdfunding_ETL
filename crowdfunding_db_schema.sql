@@ -102,7 +102,7 @@ INNER JOIN campaign
 ON contacts.contact_id = campaign.contact_id
 WHERE campaign.outcome = 'successful';
 
--- return the numer of sccessful campaigns based on category.
+-- return the number of sccessful campaigns based on category.
 SELECT category.category,
 COUNT(category.category)
 FROM category
@@ -112,7 +112,7 @@ WHERE campaign.outcome = 'successful'
 GROUP BY category.category
 ORDER BY COUNT(category.category) DESC;
 
--- return the numer of sccessful campaigns based on subcategory.
+-- return the number of sccessful campaigns based on subcategory.
 SELECT subcategory.subcategory,
 COUNT(subcategory.subcategory)
 FROM subcategory
