@@ -60,30 +60,52 @@ SELECT * FROM contacts;
 SELECT * FROM category;
 SELECT * FROM subcategory;
 
--- Verify that each table has the correct data by running a SELECT statement for each column.
+-- SELECT statement to return the number of campaigns that were successful, failed, or are still live.
+SELECT outcome, 
+COUNT(outcome) 
+FROM campaign 
+GROUP BY outcome;
 
-SELECT cf_id FROM campaign;
-SELECT contact_id FROM campaign;
-SELECT company_name FROM campaign;
-SELECT description FROM campaign;
-SELECT goal FROM campaign;
-SELECT pledged FROM campaign;
-SELECT outcome FROM campaign;
-SELECT backers_count FROM campaign;
-SELECT country FROM campaign;
-SELECT currency FROM campaign;
-SELECT launched_date FROM campaign;
-SELECT end_date FROM campaign;
-SELECT category_id FROM campaign;
-SELECT subcategory_id FROM campaign;
+-- SELECT statement to return the number of campaigns that were successful, failed, or are still live, 
+-- sorted by the number of campaigns in each outcome category.
+SELECT outcome, 
+COUNT(outcome) 
+FROM campaign 
+GROUP BY outcome 
+ORDER BY COUNT(outcome) DESC;
 
-SELECT contact_id FROM contacts;
-SELECT first_name FROM contacts;
-SELECT last_name FROM contacts;
-SELECT email FROM contacts;
+-- SELECT statement to return the number of campaigns that were successful, failed, or are still live, 
+-- sorted by the number of campaigns in each outcome category, and the percentage of total campaigns for each outcome category.
+SELECT outcome, 
+COUNT(outcome), 
+ROUND(COUNT(outcome) * 100.0 / (SELECT COUNT(*) FROM campaign), 2) 
+AS percentage FROM campaign 
+GROUP BY outcome 
+ORDER BY COUNT(outcome) DESC;
 
-SELECT category_id FROM category;
-SELECT category FROM category;
+-- list email addresses for contacts who have backed successful campaigns.
+SELECT DISTINCT contacts.email
+FROM contacts
+INNER JOIN campaign
+ON contacts.contact_id = campaign.contact_id
+WHERE campaign.outcome = 'successful';
 
-SELECT subcategory_id FROM subcategory;
-SELECT subcategory FROM subcategory;
+-- return the numer of sccessful campaigns based on category.
+SELECT category.category,
+COUNT(category.category)
+FROM category
+INNER JOIN campaign
+ON category.category_id = campaign.category_id
+WHERE campaign.outcome = 'successful'
+GROUP BY category.category
+ORDER BY COUNT(category.category) DESC;
+
+-- return the numer of sccessful campaigns based on subcategory.
+SELECT subcategory.subcategory,
+COUNT(subcategory.subcategory)
+FROM subcategory
+INNER JOIN campaign
+ON subcategory.subcategory_id = campaign.subcategory_id
+WHERE campaign.outcome = 'successful'
+GROUP BY subcategory.subcategory
+ORDER BY COUNT(subcategory.subcategory) DESC;
