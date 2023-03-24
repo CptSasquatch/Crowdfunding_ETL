@@ -1,3 +1,12 @@
+-- Create the crowdfunding database.
+CREATE DATABASE crowdfunding_db
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+    
+-- Create the tables for the crowdfunding database.
 CREATE TABLE "campaign" (
     "cf_id" int   NOT NULL,
     "contact_id" int   NOT NULL,
@@ -52,6 +61,9 @@ REFERENCES "category" ("category_id");
 
 ALTER TABLE "campaign" ADD CONSTRAINT "fk_campaign_subcategory_id" FOREIGN KEY("subcategory_id")
 REFERENCES "subcategory" ("subcategory_id");
+
+-- load the data into the tables from the csv files in the following order:
+-- subcategory.csv, category.csv, contacts.csv, campaign.csv
 
 -- Verify the table creation by running a SELECT statement for each table.
 
