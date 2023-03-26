@@ -66,7 +66,7 @@ REFERENCES "subcategory" ("subcategory_id");
 
 -- load the data into the tables from the csv files in the following order:
 -- subcategory.csv, category.csv, contacts.csv, campaign.csv
--- note: the path to the csv files may need to be updated to reflect the location of the csv files on your computer.
+-- note: the path to the csv files will need to be updated to reflect the location of the csv files on your computer.
 
 COPY subcategory
 FROM '../Resources/subcategory.csv'
