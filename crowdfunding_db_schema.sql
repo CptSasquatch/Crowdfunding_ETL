@@ -1,4 +1,5 @@
 -- Create the crowdfunding database.
+
 CREATE DATABASE crowdfunding_db
     WITH
     OWNER = postgres
@@ -7,6 +8,7 @@ CREATE DATABASE crowdfunding_db
     IS_TEMPLATE = False;
     
 -- Create the tables for the crowdfunding database.
+
 CREATE TABLE "campaign" (
     "cf_id" int   NOT NULL,
     "contact_id" int   NOT NULL,
@@ -64,6 +66,27 @@ REFERENCES "subcategory" ("subcategory_id");
 
 -- load the data into the tables from the csv files in the following order:
 -- subcategory.csv, category.csv, contacts.csv, campaign.csv
+-- note: the path to the csv files may need to be updated to reflect the location of the csv files on your computer.
+
+COPY subcategory
+FROM '../Resources/subcategory.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY category
+FROM '../Resources/category.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY contacts
+FROM '../Resources/contacts.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY campaign
+FROM '../Resources/campaign.csv'
+DELIMITER ','
+CSV HEADER;
 
 -- Verify the table creation by running a SELECT statement for each table.
 
@@ -73,6 +96,7 @@ SELECT * FROM category;
 SELECT * FROM subcategory;
 
 -- SELECT statement to return the number of campaigns that were successful, failed, or are still live.
+
 SELECT outcome, 
 COUNT(outcome) 
 FROM campaign 
@@ -80,6 +104,7 @@ GROUP BY outcome;
 
 -- SELECT statement to return the number of campaigns that were successful, failed, or are still live, 
 -- sorted by the number of campaigns in each outcome category.
+
 SELECT outcome, 
 COUNT(outcome) 
 FROM campaign 
@@ -88,6 +113,7 @@ ORDER BY COUNT(outcome) DESC;
 
 -- SELECT statement to return the number of campaigns that were successful, failed, or are still live, 
 -- sorted by the number of campaigns in each outcome category, and the percentage of total campaigns for each outcome category.
+
 SELECT outcome, 
 COUNT(outcome), 
 ROUND(COUNT(outcome) * 100.0 / (SELECT COUNT(*) FROM campaign), 2) 
@@ -96,6 +122,7 @@ GROUP BY outcome
 ORDER BY COUNT(outcome) DESC;
 
 -- list email addresses for contacts who have backed successful campaigns.
+
 SELECT DISTINCT contacts.email
 FROM contacts
 INNER JOIN campaign
@@ -103,6 +130,7 @@ ON contacts.contact_id = campaign.contact_id
 WHERE campaign.outcome = 'successful';
 
 -- return the number of sccessful campaigns based on category.
+
 SELECT category.category,
 COUNT(category.category)
 FROM category
@@ -113,6 +141,7 @@ GROUP BY category.category
 ORDER BY COUNT(category.category) DESC;
 
 -- return the number of sccessful campaigns based on subcategory.
+
 SELECT subcategory.subcategory,
 COUNT(subcategory.subcategory)
 FROM subcategory
